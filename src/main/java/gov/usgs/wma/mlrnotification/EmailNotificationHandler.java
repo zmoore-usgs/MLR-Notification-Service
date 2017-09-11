@@ -1,0 +1,75 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package gov.usgs.wma.mlrnotification;
+
+import javax.mail.internet.AddressException;
+import javax.mail.internet.InternetAddress;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.stereotype.Component;
+
+/**
+ *
+ * @author zmoore
+ */
+@Component
+public class EmailNotificationHandler {
+	@Autowired
+	public JavaMailSender mailSender;
+	
+	@Value("${mlrEmailTemplateText}")
+	private String templateText;
+	
+	@Value("${mlrEmailTemplateFrom}")
+	private String templateFrom;
+	
+	public String sendEmail(String message, String recipient){
+		SimpleMailMessage email = new SimpleMailMessage();
+		
+		//Validate Parameters
+		String validationStatus = validateMessageParameters(message, recipient);
+		
+		if(validationStatus != null){
+			return validationStatus;
+		}
+		
+		//Build Email Text
+		String fullText = templateText + message;
+		
+		//Build Email
+		email.setFrom(templateFrom);
+		email.setTo(recipient);
+		email.setText(fullText);
+		
+		//Send Email
+		try {
+			mailSender.send(email);
+		} catch (Exception ex) {
+			return ex.getMessage() != null ? ex.getMessage() : "Unhandled Exception: " + ex.toString();
+		}
+		
+		return null;
+	}
+	
+	private String validateMessageParameters(String message, String recipient) {
+		//Validate Recipient
+		try {
+			InternetAddress emailAddr = new InternetAddress(recipient);
+			emailAddr.validate();
+		} catch (AddressException ex) {
+			return "The provided recipient email address is invalid.";
+		}
+		
+		//Validate Message
+		if(message == null || message.length() == 0){
+			return "No message content recieved.";
+		}
+		
+		return null;
+	}
+}
