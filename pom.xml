@@ -67,6 +67,12 @@
             <artifactId>springfox-swagger-ui</artifactId>
             <version>${springfox.version}</version>
         </dependency>
+		
+		<dependency>
+			<groupId>commons-validator</groupId>
+			<artifactId>commons-validator</artifactId>
+			<version>1.4.0</version>
+		</dependency>
 
         <!-- Testing -->
 

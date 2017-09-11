@@ -5,8 +5,7 @@
  */
 package gov.usgs.wma.mlrnotification;
 
-import javax.mail.internet.AddressException;
-import javax.mail.internet.InternetAddress;
+import org.apache.commons.validator.routines.EmailValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
@@ -27,6 +26,14 @@ public class EmailNotificationHandler {
 	
 	@Value("${mlrEmailTemplateFrom}")
 	private String templateFrom;
+	
+	public String getTemplateText() {
+		return templateText;
+	}
+	
+	public String getTemplateFrom() {
+		return templateFrom;
+	}
 	
 	public String sendEmail(String message, String recipient){
 		SimpleMailMessage email = new SimpleMailMessage();
@@ -56,12 +63,9 @@ public class EmailNotificationHandler {
 		return null;
 	}
 	
-	private String validateMessageParameters(String message, String recipient) {
+	public String validateMessageParameters(String message, String recipient) {
 		//Validate Recipient
-		try {
-			InternetAddress emailAddr = new InternetAddress(recipient);
-			emailAddr.validate();
-		} catch (AddressException ex) {
+		if(!EmailValidator.getInstance(false).isValid(recipient)){
 			return "The provided recipient email address is invalid.";
 		}
 		

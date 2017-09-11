@@ -1,0 +1,9 @@
+mlrNotificationServicePwd: test
+mlrEmailTemplateFrom: test@test.test
+mlrEmailTemplateText: TemplateTest-
+spring:
+  mail:
+    host: localhost
+    port: 25545
+    defaultEncoding: UTF-8
+    protocol: smtp
