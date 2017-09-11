@@ -1,6 +1,7 @@
 mlrNotificationServicePwd: test
 mlrEmailTemplateFrom: test@test.test
 mlrEmailTemplateText: TemplateTest-
+mlrEmailTemplateSubject: test
 spring:
   mail:
     host: localhost

@@ -27,6 +27,9 @@ public class EmailNotificationHandler {
 	@Value("${mlrEmailTemplateFrom}")
 	private String templateFrom;
 	
+	@Value("${mlrEmailTemplateSubject}")
+	private String templateSubject;
+	
 	public String getTemplateText() {
 		return templateText;
 	}
@@ -35,11 +38,15 @@ public class EmailNotificationHandler {
 		return templateFrom;
 	}
 	
-	public String sendEmail(String message, String recipient){
+	public String getTemplateSubject() {
+		return templateSubject;
+	}
+	
+	public String sendEmail(String subject, String message, String recipient){
 		SimpleMailMessage email = new SimpleMailMessage();
 		
 		//Validate Parameters
-		String validationStatus = validateMessageParameters(message, recipient);
+		String validationStatus = validateMessageParameters(subject, message, recipient);
 		
 		if(validationStatus != null){
 			return validationStatus;
@@ -51,6 +58,7 @@ public class EmailNotificationHandler {
 		//Build Email
 		email.setFrom(templateFrom);
 		email.setTo(recipient);
+		email.setSubject(subject);
 		email.setText(fullText);
 		
 		//Send Email
@@ -63,10 +71,15 @@ public class EmailNotificationHandler {
 		return null;
 	}
 	
-	public String validateMessageParameters(String message, String recipient) {
+	public String validateMessageParameters(String subject, String message, String recipient) {
 		//Validate Recipient
 		if(!EmailValidator.getInstance(false).isValid(recipient)){
 			return "The provided recipient email address is invalid.";
+		}
+		
+		//Validate Subject
+		if(subject == null || subject.length() == 0){
+			return "No subject content recieved.";
 		}
 		
 		//Validate Message

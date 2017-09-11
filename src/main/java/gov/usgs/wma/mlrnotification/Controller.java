@@ -17,8 +17,8 @@ public class Controller {
 	public EmailNotificationHandler emailHandler;
 
 	@PostMapping("/email")
-	public void createEmailNotification(@RequestParam("message") String message, @RequestParam("recipient") String recipient, HttpServletResponse response) {		
-		String status = emailHandler.sendEmail(message, recipient);
+	public void createEmailNotification(@RequestParam("subject") String subject, @RequestParam("message") String message, @RequestParam("recipient") String recipient, HttpServletResponse response) {		
+		String status = emailHandler.sendEmail(subject, message, recipient);
 		
 		if(status != null){
 			status = "An error occurred while sending the email notification: " + status;
