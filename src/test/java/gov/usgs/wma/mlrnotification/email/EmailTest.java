@@ -58,7 +58,6 @@ public class EmailTest {
 		assertEquals(status, "The provided recipient email address is invalid.");
 		status = emailHandler.validateMessageParameters("Valid", "test", null);
 		assertEquals(status, "The provided recipient email address is invalid.");
-		
 	}
 	
 	@Test

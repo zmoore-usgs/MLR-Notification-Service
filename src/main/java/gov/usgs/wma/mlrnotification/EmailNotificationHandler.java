@@ -10,13 +10,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 /**
  *
  * @author zmoore
  */
-@Component
+@Service
 public class EmailNotificationHandler {
 	@Autowired
 	public JavaMailSender mailSender;
@@ -27,19 +27,12 @@ public class EmailNotificationHandler {
 	@Value("${mlrEmailTemplateFrom}")
 	private String templateFrom;
 	
-	@Value("${mlrEmailTemplateSubject}")
-	private String templateSubject;
-	
 	public String getTemplateText() {
 		return templateText;
 	}
 	
 	public String getTemplateFrom() {
 		return templateFrom;
-	}
-	
-	public String getTemplateSubject() {
-		return templateSubject;
 	}
 	
 	public String sendEmail(String subject, String message, String recipient){
