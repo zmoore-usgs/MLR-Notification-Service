@@ -35,7 +35,7 @@ public class EmailTest {
 	
 	@Test
 	public void testEmailValidation() throws Exception {
-		//Send Valid Email with Valid Subject to Valid Recipient - Expect Valid Response and Equivalent Data
+		//Send Valid Email with Valid Subject to Valid Recipient - Expect Null Response
 		String status = emailHandler.validateMessageParameters("test", "test", "test@localhost.com");
 		assertEquals(status, null);
 		
@@ -61,7 +61,7 @@ public class EmailTest {
 	}
 	
 	@Test
-	public void testEmailService() throws Exception {
+	public void testEmailSend() throws Exception {
 		String testText = "test";		
 		
 		//Send Valid Email to Valid Recipient - Expect Valid Response and Equivalent Data

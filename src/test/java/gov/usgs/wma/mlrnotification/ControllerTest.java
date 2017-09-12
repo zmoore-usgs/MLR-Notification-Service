@@ -23,7 +23,7 @@ public class ControllerTest {
 	private EmailNotificationHandler emailHandler;
 	
 	@Test
-	public void testSendEmail() throws Exception {
+	public void testEmailController() throws Exception {
 		String validEmail = "test@test.com";
 		String invalidEmail = "testtestcom";
 		String emptyEmail = "";
