@@ -2,8 +2,6 @@ package gov.usgs.wma.mlrnotification.email;
 
 import com.icegreen.greenmail.util.GreenMail;
 import com.icegreen.greenmail.util.ServerSetup;
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import gov.usgs.wma.mlrnotification.EmailNotificationHandler;
