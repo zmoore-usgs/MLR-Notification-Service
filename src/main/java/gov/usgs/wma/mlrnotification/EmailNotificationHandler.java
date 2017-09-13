@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package gov.usgs.wma.mlrnotification;
 
 import org.apache.commons.validator.routines.EmailValidator;
@@ -37,14 +32,7 @@ public class EmailNotificationHandler {
 	
 	public String sendEmail(String subject, String message, String recipient){
 		SimpleMailMessage email = new SimpleMailMessage();
-		
-		//Validate Parameters
-		String validationStatus = validateMessageParameters(subject, message, recipient);
-		
-		if(validationStatus != null){
-			return validationStatus;
-		}
-		
+						
 		//Build Email Text
 		String fullText = templateText + message;
 		
@@ -58,7 +46,7 @@ public class EmailNotificationHandler {
 		try {
 			mailSender.send(email);
 		} catch (Exception ex) {
-			return ex.getMessage() != null ? ex.getMessage() : "Unhandled Exception: " + ex.toString();
+			return ex.getMessage() != null ? ex.getMessage() : ex.toString();
 		}
 		
 		return null;

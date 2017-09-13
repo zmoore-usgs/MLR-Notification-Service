@@ -1,6 +1,5 @@
 package gov.usgs.wma.mlrnotification;
 
-import java.io.IOException;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -17,17 +16,25 @@ public class Controller {
 	public EmailNotificationHandler emailHandler;
 
 	@PostMapping("/email")
-	public void createEmailNotification(@RequestParam("subject") String subject, @RequestParam("message") String message, @RequestParam("recipient") String recipient, HttpServletResponse response) {		
-		String status = emailHandler.sendEmail(subject, message, recipient);
+	public String createEmailNotification(@RequestParam("subject") String subject, @RequestParam("message") String message, @RequestParam("recipient") String recipient, HttpServletResponse response) {
+		String responseStr = "{}";
+		String validationStatus = emailHandler.validateMessageParameters(subject, message, recipient);
 		
-		if(status != null){
-			status = "An error occurred while sending the email notification: " + status;
+		if(validationStatus != null){
+			response.setStatus(HttpStatus.BAD_REQUEST.value());
+			responseStr = "{\"error\":{\"message\":\"" + validationStatus + "\"}}";
+		} else {
+			String sendStatus = emailHandler.sendEmail(subject, message, recipient);
 			
-			try {
-				response.sendError(HttpStatus.INTERNAL_SERVER_ERROR.value(), status);
-			} catch (IOException ex){
+			if(sendStatus != null){
 				response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
+				responseStr = "{\"error\":{\"message\":\"" + sendStatus + "\"}}";
+			} else {
+				response.setStatus(HttpStatus.OK.value());
 			}
-		}	
+		}
+		
+		response.setContentType("application/json;charset=UTF-8");
+		return responseStr;
 	}
 }

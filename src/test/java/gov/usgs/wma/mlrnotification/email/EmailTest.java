@@ -22,17 +22,11 @@ import org.springframework.test.context.junit4.SpringRunner;
 public class EmailTest {
 	@Autowired
 	private EmailNotificationHandler emailHandler;
-    private GreenMail testSmtp;
-	
+	private GreenMail testSmtp;
+
 	@Value("${spring.mail.port}")
 	private int smtpPort;
- 
-    @Before
-    public void testSmtpInit(){
-        testSmtp = new GreenMail(new ServerSetup(smtpPort, null, "smtp"));
-        testSmtp.start();
-    }
-	
+
 	@Test
 	public void testEmailValidation() throws Exception {
 		//Send Valid Email with Valid Subject to Valid Recipient - Expect Null Response
@@ -62,6 +56,8 @@ public class EmailTest {
 	
 	@Test
 	public void testEmailSend() throws Exception {
+		testSmtp = new GreenMail(new ServerSetup(smtpPort, null, "smtp"));
+		testSmtp.start();
 		String testText = "test";		
 		
 		//Send Valid Email to Valid Recipient - Expect Valid Response and Equivalent Data
@@ -69,33 +65,31 @@ public class EmailTest {
 		MimeMessage[] receivedMessages = testSmtp.getReceivedMessages();
 		assertEquals(1, receivedMessages.length);
 		String content = (String) receivedMessages[0].getContent();
-		
 		assertTrue(content.contains(emailHandler.getTemplateText() + testText));
 		assertEquals(status, null);
 		
-		//Send Invalid Email - Expect Error Response
-		status = emailHandler.sendEmail("", "test", "test@localhost.com");
-		assertEquals(status, "No subject content recieved.");
-		status = emailHandler.sendEmail(null, "test", "test@localhost.com");
-		assertEquals(status, "No subject content recieved.");
+		//Send  with Invalid Subject - Expect Valid Response
+		assertEquals(emailHandler.sendEmail("", "test", "test@localhost.com"), null);
 		
-		//Send with Invalid Subject - Expect Error Response
-		status = emailHandler.sendEmail("test", "", "test@localhost.com");
-		assertEquals(status, "No message content recieved.");
-		status = emailHandler.sendEmail("test", null, "test@localhost.com");
-		assertEquals(status, "No message content recieved.");
+		//Send with Missing Subject - Expect Valid Response
+		assertEquals(emailHandler.sendEmail(null, "test", "test@localhost.com"), null);
 		
-		//Send to Invalid Recipient - Expect Error Response
-		status = emailHandler.sendEmail("Valid", "test", "testlocalhostcom");
-		assertEquals(status, "The provided recipient email address is invalid.");
-		status = emailHandler.sendEmail("Valid", "test", "");
-		assertEquals(status, "The provided recipient email address is invalid.");
-		status = emailHandler.sendEmail("Valid", "test", null);
-		assertEquals(status, "The provided recipient email address is invalid.");
+		//Send with Invalid Message - Expect Valid Response
+		assertEquals(emailHandler.sendEmail("test", "", "test@localhost.com"), null);
+		
+		//Send with Missing Message - Expect Valid Response
+		assertEquals(emailHandler.sendEmail("test", null, "test@localhost.com"), null);
+		
+		//Send to Invalid Recipient - Expect Valid Response
+		assertEquals(emailHandler.sendEmail("test", "test", "testlocalhostcom"), null);
+		
+		//Send to Missing Recipient - Expect Error Response
+		assertTrue(emailHandler.sendEmail("test", "test", "").contains("Could not parse mail"));
+		assertTrue(emailHandler.sendEmail("test", "test", null).contains("java.lang.NullPointerException"));
+		
+		testSmtp.stop();
+		
+		//Send Valid Email to Valid Recipient with Server Disabled - Expect Error Response
+		assertTrue(emailHandler.sendEmail("test", "test", "test@localhost.com").contains("Mail server connection failed"));
 	}
- 
-    @After
-    public void cleanup(){
-        testSmtp.stop();
-    }
 }
