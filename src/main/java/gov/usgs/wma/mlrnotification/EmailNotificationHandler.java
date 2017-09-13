@@ -21,7 +21,7 @@ public class EmailNotificationHandler {
 	@Autowired
 	public JavaMailSender mailSender;
 	
-	@Value("${mlrEmailTemplateText}")
+	@Value("${mlrEmailTemplateText:}")
 	private String templateText;
 	
 	@Value("${mlrEmailTemplateFrom}")
