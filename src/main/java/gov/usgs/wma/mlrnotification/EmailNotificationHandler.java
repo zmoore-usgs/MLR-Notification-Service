@@ -48,7 +48,7 @@ public class EmailNotificationHandler {
 		return null;
 	}
 	
-	public String validateMessageParameters(String subject, String message, String recipient) {
+	public String validateEmailParameters(String subject, String message, String recipient) {
 		//Validate Recipient
 		if(!EmailValidator.getInstance(false).isValid(recipient)){
 			return "The provided recipient email address is invalid.";

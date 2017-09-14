@@ -6,7 +6,11 @@ MLR Service to Email Processing Result Notifications to Users
 
 ## Running the Application
 Copy the application-test.yml file from the project root directory to an "application.yml" file also at the project root directory and change the values as needed.
-Open a terminal and cd to the project root directory. Within this directory run ```mvn spring-boot:run``` and the application will launch and be available at http://localhost:8080/swagger-ui.html
+Open a terminal and cd to the project root directory. Within this directory run 
+```
+mvn spring-boot:run
+``` 
+and then the application will launch and be available at http://localhost:8080/swagger-ui.html
 
 ## Using Docker
 This docker image is designed to be used with Docker Swarm and as such it uses Docker Secrets for passing in configuration.

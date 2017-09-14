@@ -24,70 +24,150 @@ public class EmailTest {
 
 	@Value("${spring.mail.port}")
 	private int smtpPort;
-
+	
+	public static final String VALID_CONTENT = "test";
+	public static final String EMPTY_CONTENT = "";
+	public static final String VALID_EMAIL = "test@test.com";
+	public static final String INVALID_EMAIL = "testtestcom";
+	
 	@Test
-	public void testEmailValidation() throws Exception {
+	public void testEmailValidationValidData() throws Exception {
 		//Send Valid Email with Valid Subject to Valid Recipient - Expect Null Response
-		String status = emailHandler.validateMessageParameters("test", "test", "test@localhost.com");
+		String status = emailHandler.validateEmailParameters(VALID_CONTENT, VALID_CONTENT, VALID_EMAIL);
 		assertEquals(status, null);
-		
+	}
+	
+	@Test
+	public void testEmailValidationInvalidSubject() throws Exception {
 		//Send Invalid Subject - Expect Error Response
-		status = emailHandler.validateMessageParameters("", "test", "test@localhost.com");
+		String status = emailHandler.validateEmailParameters(EMPTY_CONTENT, VALID_CONTENT, VALID_EMAIL);
 		assertEquals(status, "No subject content recieved.");
-		status = emailHandler.validateMessageParameters(null, "test", "test@localhost.com");
+		status = emailHandler.validateEmailParameters(null, VALID_CONTENT, VALID_EMAIL);
 		assertEquals(status, "No subject content recieved.");
-		
+	}
+	
+	@Test
+	public void testEmailValidationInvalidMessage() throws Exception {
 		//Send with Invalid Message - Expect Error Response
-		status = emailHandler.validateMessageParameters("test", "", "test@localhost.com");
+		String status = emailHandler.validateEmailParameters(VALID_CONTENT, EMPTY_CONTENT, VALID_EMAIL);
 		assertEquals(status, "No message content recieved.");
-		status = emailHandler.validateMessageParameters("test", null, "test@localhost.com");
+		status = emailHandler.validateEmailParameters(VALID_CONTENT, null, VALID_EMAIL);
 		assertEquals(status, "No message content recieved.");
-		
+	}
+	
+	@Test
+	public void testEmailValidationInvalidRecipient() throws Exception {
 		//Send to Invalid Recipient - Expect Error Response
-		status = emailHandler.validateMessageParameters("Valid", "test", "testlocalhostcom");
+		String status = emailHandler.validateEmailParameters(VALID_CONTENT, VALID_CONTENT, INVALID_EMAIL);
 		assertEquals(status, "The provided recipient email address is invalid.");
-		status = emailHandler.validateMessageParameters("Valid", "test", "");
+		status = emailHandler.validateEmailParameters(VALID_CONTENT, VALID_CONTENT, EMPTY_CONTENT);
 		assertEquals(status, "The provided recipient email address is invalid.");
-		status = emailHandler.validateMessageParameters("Valid", "test", null);
+		status = emailHandler.validateEmailParameters(VALID_CONTENT, VALID_CONTENT, null);
 		assertEquals(status, "The provided recipient email address is invalid.");
 	}
 	
 	@Test
-	public void testEmailSend() throws Exception {
+	public void testEmailSendValidData() throws Exception {
+		//Setup mock smtp server
 		testSmtp = new GreenMail(new ServerSetup(smtpPort, null, "smtp"));
 		testSmtp.start();
-		String testText = "test";		
 		
 		//Send Valid Email to Valid Recipient - Expect Valid Response and Equivalent Data
-		String status = emailHandler.sendEmail(testText, "test", "test@localhost.com");
-		MimeMessage[] receivedMessages = testSmtp.getReceivedMessages();
-		assertEquals(1, receivedMessages.length);
-		String content = (String) receivedMessages[0].getContent();
-		assertTrue(content.contains(emailHandler.getTemplateText() + testText));
+		String status = emailHandler.sendEmail(VALID_CONTENT, VALID_CONTENT, VALID_EMAIL);
 		assertEquals(status, null);
 		
-		//Send  with Invalid Subject - Expect Valid Response
-		assertEquals(emailHandler.sendEmail("", "test", "test@localhost.com"), null);
+		//Verify Received Emails
+		MimeMessage[] receivedMessages = testSmtp.getReceivedMessages();
+		assertEquals(1, receivedMessages.length);
 		
+		//Verify Email Content
+		String content = (String) receivedMessages[0].getContent();
+		assertTrue(content.contains(emailHandler.getTemplateText() + VALID_CONTENT));
+		
+		//Stop mock smtp server
+		testSmtp.stop();
+	}
+	
+	@Test
+	public void testEmailSendInvalidSubject() throws Exception {
+		//Setup mock smtp server
+		testSmtp = new GreenMail(new ServerSetup(smtpPort, null, "smtp"));
+		testSmtp.start();
+		
+		//Send  with Empty Subject - Expect Valid Response
+		assertEquals(emailHandler.sendEmail(EMPTY_CONTENT, VALID_CONTENT, VALID_EMAIL), null);
 		//Send with Missing Subject - Expect Valid Response
-		assertEquals(emailHandler.sendEmail(null, "test", "test@localhost.com"), null);
+		assertEquals(emailHandler.sendEmail(null, VALID_CONTENT, VALID_EMAIL), null);
 		
-		//Send with Invalid Message - Expect Valid Response
-		assertEquals(emailHandler.sendEmail("test", "", "test@localhost.com"), null);
+		//Verify Recieved Emails
+		MimeMessage[] receivedMessages = testSmtp.getReceivedMessages();
+		assertEquals(2, receivedMessages.length);
 		
+		//Verify Contents of Emails 
+		String content = (String) receivedMessages[0].getContent();
+		assertTrue(content.contains(emailHandler.getTemplateText() + VALID_CONTENT));
+		content = (String) receivedMessages[1].getContent();
+		assertTrue(content.contains(emailHandler.getTemplateText() + VALID_CONTENT));
+		
+		//Stop mock smtp server
+		testSmtp.stop();
+	}
+	
+	@Test
+	public void testEmailSendInvalidMessage() throws Exception {
+		//Setup mock smtp server
+		testSmtp = new GreenMail(new ServerSetup(smtpPort, null, "smtp"));
+		testSmtp.start();
+		
+		//Send with Empty Message - Expect Valid Response
+		assertEquals(emailHandler.sendEmail(VALID_CONTENT, EMPTY_CONTENT, VALID_EMAIL), null);
 		//Send with Missing Message - Expect Valid Response
-		assertEquals(emailHandler.sendEmail("test", null, "test@localhost.com"), null);
+		assertEquals(emailHandler.sendEmail(VALID_CONTENT, null, VALID_EMAIL), null);
+		
+		//Verify Recieved Emails
+		MimeMessage[] receivedMessages = testSmtp.getReceivedMessages();
+		assertEquals(2, receivedMessages.length);
+		
+		//Verify Subjects of Emails 
+		String subject = (String) receivedMessages[0].getSubject();
+		assertTrue(subject.contains(VALID_CONTENT));
+		subject = (String) receivedMessages[1].getSubject();
+		assertTrue(subject.contains(VALID_CONTENT));
+		
+		//Stop mock smtp server
+		testSmtp.stop();
+	}
+	
+	@Test
+	public void testEmailSendInvalidRecipient() throws Exception {
+		//Setup mock smtp server
+		testSmtp = new GreenMail(new ServerSetup(smtpPort, null, "smtp"));
+		testSmtp.start();
 		
 		//Send to Invalid Recipient - Expect Valid Response
-		assertEquals(emailHandler.sendEmail("test", "test", "testlocalhostcom"), null);
+		assertEquals(emailHandler.sendEmail(VALID_CONTENT, VALID_CONTENT, INVALID_EMAIL), null);
+
+		//Send to Empty Recipient - Expect Error Response
+		assertTrue(emailHandler.sendEmail(VALID_CONTENT, VALID_CONTENT, EMPTY_CONTENT).contains("Could not parse mail"));
 		
 		//Send to Missing Recipient - Expect Error Response
-		assertTrue(emailHandler.sendEmail("test", "test", "").contains("Could not parse mail"));
-		assertTrue(emailHandler.sendEmail("test", "test", null).contains("java.lang.NullPointerException"));
+		assertTrue(emailHandler.sendEmail(VALID_CONTENT, VALID_CONTENT, null).contains("java.lang.NullPointerException"));
 		
+		//Verify Recieved Emails
+		MimeMessage[] receivedMessages = testSmtp.getReceivedMessages();
+		assertEquals(1, receivedMessages.length);
+		
+		//Verify Contents of Emails 
+		String content = (String) receivedMessages[0].getContent();
+		assertTrue(content.contains(emailHandler.getTemplateText() + VALID_CONTENT));
+		
+		//Stop mock smtp server
 		testSmtp.stop();
-		
+	}
+	
+	@Test
+	public void testEmailSendInvalidServer() throws Exception {
 		//Send Valid Email to Valid Recipient with Server Disabled - Expect Error Response
-		assertTrue(emailHandler.sendEmail("test", "test", "test@localhost.com").contains("Mail server connection failed"));
+		assertTrue(emailHandler.sendEmail(VALID_CONTENT, VALID_CONTENT, VALID_EMAIL).contains("Mail server connection failed"));
 	}
 }
