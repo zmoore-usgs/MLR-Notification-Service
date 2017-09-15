@@ -1,0 +1,16 @@
+mlrNotificationServicePwd: test
+mlrEmailTemplateFrom: test@test.test
+mlrEmailTemplateText: TemplateTest-
+spring:
+  mail:
+    host: localhost
+    port: 25545
+    #username: test
+    #password: test
+    defaultEncoding: UTF-8
+    protocol: smtp
+    #tls: true
+    #properties.mail.smtp:
+    #  auth: true
+    #  starttls.enable: true
+    #  ssl.trust: <trust url>
