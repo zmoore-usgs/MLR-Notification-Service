@@ -12,10 +12,10 @@ public class EmailNotificationHandler {
 	@Autowired
 	public JavaMailSender mailSender;
 	
-	@Value("${mlrEmailTemplateText:}")
+	@Value("${MLR_EMAIL_TEMPLATE_TEXT:}")
 	private String templateText;
 	
-	@Value("${mlrEmailTemplateFrom}")
+	@Value("${MLR_EMAIL_TEMPLATE_FROM}")
 	private String templateFrom;
 	
 	public String getTemplateText() {
