@@ -1,16 +1,9 @@
-mlrNotificationServicePwd: test
-MLR_EMAIL_TEMPLATE_FROM: test@test.test
-MLR_EMAIL_TEMPLATE_TEXT: TemplateTest-
+mlrNotificationServicePwd: ${MLR_NOTIFICATION_SERVICE_PWD}
+mlrEmailTemplateFrom: ${MLR_NOTIFICATION_EMAIL_FROM}
+mlrEmailTemplateText: ${MLR_NOTIFICATION_EMAIL_TEXT}
 spring:
   mail:
-    host: localhost
-    port: 255
-    #username: test
-    #password: test
+    host: ${MLR_NOTIFICATION_EMAIL_HOST}
+    port: ${MLR_NOTIFICATION_EMAIL_PORT}
     defaultEncoding: UTF-8
     protocol: smtp
-    #tls: true
-    #properties.mail.smtp:
-    #  auth: true
-    #  starttls.enable: true
-    #  ssl.trust: <trust url>
