@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>gov.usgs.wma</groupId>
     <artifactId>mlrNotification</artifactId>
-    <version>0.2-SNAPSHOT</version>
+    <version>0.2</version>
     <packaging>jar</packaging>
 
     <properties>
@@ -141,6 +141,6 @@
         <connection>scm:git:https://github.com/USGS-CIDA/MLR-Notification-Service.git</connection>
         <developerConnection>scm:git:https://github.com/USGS-CIDA/MLR-Notification-Service.git</developerConnection>
         <url>https://github.com/USGS-CIDA/MLR-Notification-Service</url>
-        <tag>HEAD</tag>
+        <tag>mlrNotification-0.2</tag>
     </scm>
 </project>
