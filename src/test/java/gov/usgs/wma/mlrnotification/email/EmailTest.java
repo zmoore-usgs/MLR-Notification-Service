@@ -235,7 +235,28 @@ public class EmailTest {
 		
 		//Verify Received Emails
 		MimeMessage[] receivedMessages = testSmtp.getReceivedMessages();
-		assertEquals(1, receivedMessages.length);
+		
+		//Verify Email Content
+		String subject = receivedMessages[0].getSubject();
+		assertTrue(subject.contains(validText));
+	}
+	
+	@Test
+	public void testEmailSendValidDataWithOptional() throws Exception {
+		//Send Valid Email to Valid Recipient - Expect Valid Response and Equivalent Data
+		ArrayList<String> emailList = new ArrayList<>();
+		emailList.add(validAddress);
+		
+		validEmail.setCc(emailList);
+		validEmail.setBcc(emailList);
+		validEmail.setReplyTo(validAddress);
+		validEmail.setFrom(validAddress);
+		
+		String status = emailHandler.sendEmail(validEmail);
+		assertEquals(status, null);
+		
+		//Verify Received Emails
+		MimeMessage[] receivedMessages = testSmtp.getReceivedMessages();
 		
 		//Verify Email Content
 		String subject = receivedMessages[0].getSubject();
@@ -259,7 +280,6 @@ public class EmailTest {
 		
 		//Verify Recieved Emails
 		MimeMessage[] receivedMessages = testSmtp.getReceivedMessages();
-		assertEquals(1, receivedMessages.length);
 		
 		//Verify Contents of Emails 
 		String subject = (String) receivedMessages[0].getSubject();
