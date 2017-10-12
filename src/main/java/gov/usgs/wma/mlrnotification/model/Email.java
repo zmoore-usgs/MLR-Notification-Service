@@ -82,7 +82,7 @@ public class  Email {
 		this.htmlBody = htmlBody;
 	}
 	
-	public String validateRequiredParameters() {
+	private String validateRequiredParameters() {
 		//Validate To
 		if(getTo() != null && getTo().size() > 0) {
 			for(String recipient : getTo()) {
@@ -118,7 +118,7 @@ public class  Email {
 		return null;
 	}
 	
-	public String validateOptionalParameters() {
+	private String validateOptionalParameters() {
 		//Validate CC
 		if(getCc() != null && getCc().size() > 0) {
 			for(String cc : getCc()) {
@@ -150,9 +150,5 @@ public class  Email {
 	public String validate() {
 		String required =  validateRequiredParameters();
 		return required == null ? validateOptionalParameters() : required;
-	}
-	
-	public boolean isValid() {
-		return validate() == null;
 	}
 }
