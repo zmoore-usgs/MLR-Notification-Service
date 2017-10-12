@@ -1,6 +1,7 @@
 package gov.usgs.wma.mlrnotification;
 
-import gov.usgs.wma.mlrnotification.email.EmailTest;
+import gov.usgs.wma.mlrnotification.model.Email;
+import java.util.ArrayList;
 import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -8,20 +9,21 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Matchers.any;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 @RunWith(SpringRunner.class)
 @WebMvcTest(Controller.class)
 @AutoConfigureMockMvc(secure=false)
+@ActiveProfiles("test")
 public class ControllerTest {	
 	@Autowired
 	private MockMvc mvc;
@@ -29,48 +31,74 @@ public class ControllerTest {
 	@MockBean
 	private EmailNotificationHandler emailHandler;
 	
-	private final String MOCK_ERROR_RESPONSE_400 = "error_400";
 	private final String MOCK_ERROR_RESPONSE_500 = "error_500";
-	private final String MISSING_PARAMETER_RESPONSE = "Required String parameter";
+	private final String validEmailJsonWithSender = "{\"to\": [\"test@test.com\"], \"from\": \"test@test.net\", \"textBody\": \"test\", \"subject\": \"test\"}";
+	private final String validEmailJsonWithoutSender = "{\"to\": [\"test@test.com\"], \"textBody\": \"test\", \"subject\": \"test\"}";
+	private final String validEmailJsonWithoutSenderNoServer = "{\"to\": [\"test@test.com\"], \"textBody\": \"test2\", \"subject\": \"test\"}";
+	private final String invalidEmailJson = "{\"from\": \"test@test.net\", \"textBody\": \"test\", \"subject\": \"test\"}";
+	private final String malformedEmailJson = "{\"from\": \"test@test.net\" \"textBody\": \"test\", \"subject\": \"test\"}";
+	private final Email validEmailWithSender  = new Email();
+	private final Email validEmailWithoutSender  = new Email();
+	private final Email validEmailWithoutSenderNoServer = new Email();
+	private final Email invalidEmail  = new Email();
 	
 	@Before
 	public void setup() {
-		//Setup mock emailHandler.validateEmailParameters
-		given(emailHandler.validateEmailParameters(EmailTest.VALID_CONTENT, EmailTest.VALID_CONTENT, EmailTest.VALID_EMAIL)).willReturn(null);
-		given(emailHandler.validateEmailParameters(EmailTest.VALID_CONTENT, EmailTest.VALID_CONTENT, EmailTest.INVALID_EMAIL)).willReturn(MOCK_ERROR_RESPONSE_400);
-		given(emailHandler.validateEmailParameters(EmailTest.VALID_CONTENT, EmailTest.VALID_CONTENT, EmailTest.EMPTY_CONTENT)).willReturn(MOCK_ERROR_RESPONSE_400);
-		given(emailHandler.validateEmailParameters(EmailTest.VALID_CONTENT, EmailTest.VALID_CONTENT, null)).willReturn(MOCK_ERROR_RESPONSE_400);
-		given(emailHandler.validateEmailParameters(EmailTest.VALID_CONTENT, EmailTest.EMPTY_CONTENT, EmailTest.VALID_EMAIL)).willReturn(MOCK_ERROR_RESPONSE_400);
-		given(emailHandler.validateEmailParameters(EmailTest.VALID_CONTENT, null, EmailTest.VALID_EMAIL)).willReturn(MOCK_ERROR_RESPONSE_400);
-		given(emailHandler.validateEmailParameters(EmailTest.EMPTY_CONTENT, EmailTest.VALID_CONTENT, EmailTest.VALID_EMAIL)).willReturn(MOCK_ERROR_RESPONSE_400);
-		given(emailHandler.validateEmailParameters(null, EmailTest.VALID_CONTENT, EmailTest.VALID_EMAIL)).willReturn(MOCK_ERROR_RESPONSE_400);
+		ArrayList<String> toList = new ArrayList<>();
+		toList.add("test@test.com");
 		
-		//Setup mock emailHandler.sendEmail
-		given(emailHandler.sendEmail(EmailTest.VALID_CONTENT, EmailTest.VALID_CONTENT, EmailTest.INVALID_EMAIL)).willReturn(MOCK_ERROR_RESPONSE_400);
-		given(emailHandler.sendEmail(EmailTest.VALID_CONTENT, EmailTest.VALID_CONTENT, EmailTest.EMPTY_CONTENT)).willReturn(MOCK_ERROR_RESPONSE_400);
-		given(emailHandler.sendEmail(EmailTest.VALID_CONTENT, EmailTest.EMPTY_CONTENT, EmailTest.VALID_EMAIL)).willReturn(null);
-		given(emailHandler.sendEmail(EmailTest.EMPTY_CONTENT, EmailTest.VALID_CONTENT, EmailTest.VALID_EMAIL)).willReturn(null);
+		//Setup Valid Email with Sender to mirror validEmailJsonWithSender
+		validEmailWithSender.setTo(toList);
+		validEmailWithSender.setFrom("test@test.net");
+		validEmailWithSender.setSubject("test");
+		validEmailWithSender.setTextBody("test");
+		
+		//Setup Valid Email without Sender to mirror validEmailJsonWithoutSender
+		validEmailWithoutSender.setTo(toList);
+		validEmailWithoutSender.setFrom("test@test.net");
+		validEmailWithoutSender.setSubject("test");
+		validEmailWithoutSender.setTextBody("test");
+		
+		//Setup Valid Email without Sender to mirror validEmailJsonWithoutSender
+		validEmailWithoutSenderNoServer.setTo(toList);
+		validEmailWithoutSenderNoServer.setFrom("test@test.net");
+		validEmailWithoutSenderNoServer.setSubject("test2");
+		validEmailWithoutSenderNoServer.setTextBody("test");
+		
+		//Setup Invalid Email to mirror invalidEmailJson
+		invalidEmail.setFrom("test@test.net");
+		invalidEmail.setSubject("test");
+		invalidEmail.setTextBody("test");
 	}
 	
 	@Test
-	public void testEmailControllerValidData() throws Exception {
-		given(emailHandler.sendEmail(EmailTest.VALID_CONTENT, EmailTest.VALID_CONTENT, EmailTest.VALID_EMAIL)).willReturn(null);
-		//Valid Subject, Message, and Recipient
+	public void testEmailControllerValidDataWithSender() throws Exception {
+		given(emailHandler.sendEmail(any(Email.class))).willReturn(null);
+		//Valid Subject, Message, Recipient, and Sender
 		mvc.perform(post("/notification/email")
-				.param("subject", EmailTest.VALID_CONTENT)
-				.param("message", EmailTest.VALID_CONTENT)
-				.param("recipient", EmailTest.VALID_EMAIL))
+				.content(validEmailJsonWithSender)
+				.contentType("application/json"))
+				.andExpect(status().isOk());
+	}
+	
+	@Test
+	public void testEmailControllerValidDataWithoutSender() throws Exception {
+		given(emailHandler.sendEmail(any(Email.class))).willReturn(null);
+		//Valid Subject, Message, Recipient, and Sender
+		mvc.perform(post("/notification/email")
+				.content(validEmailJsonWithoutSender)
+				.contentType("application/json"))
 				.andExpect(status().isOk());
 	}
 	
 	@Test
 	public void testEmailControllerValidDataNoServer() throws Exception {
-		given(emailHandler.sendEmail(EmailTest.VALID_CONTENT, EmailTest.VALID_CONTENT, EmailTest.VALID_EMAIL)).willReturn(MOCK_ERROR_RESPONSE_500);
+		given(emailHandler.sendEmail(any(Email.class))).willReturn(MOCK_ERROR_RESPONSE_500);
+		
 		//Valid Subject, Message, and Recipient
 		MvcResult result = mvc.perform(post("/notification/email")
-				.param("subject", EmailTest.VALID_CONTENT)
-				.param("message", EmailTest.VALID_CONTENT)
-				.param("recipient", EmailTest.VALID_EMAIL))
+				.content(validEmailJsonWithoutSenderNoServer)
+				.contentType("application/json"))
 				.andDo(print())
 				.andExpect(status().is5xxServerError())
 				.andReturn();
@@ -78,70 +106,23 @@ public class ControllerTest {
 	}
 
 	@Test
-	public void testEmailControllerInvalidSubject() throws Exception {
+	public void testEmailControllerInvalidEmail() throws Exception {
+		given(emailHandler.sendEmail(any(Email.class))).willReturn(null);
 		//Invalid Subject
 		MvcResult result = mvc.perform(post("/notification/email")
-				.param("subject", EmailTest.EMPTY_CONTENT)
-				.param("message", EmailTest.VALID_CONTENT)
-				.param("recipient", "test@test.com"))
+				.content(malformedEmailJson)
+				.contentType("application/json"))
 				.andDo(print())
 				.andExpect(status().is4xxClientError())
 				.andReturn();
-		assertTrue(result.getResponse().getErrorMessage().contains(MOCK_ERROR_RESPONSE_400));
-		result = mvc.perform(post("/notification/email")
-				.param("message", EmailTest.VALID_CONTENT)
-				.param("recipient", "test@test.com"))
+		assertTrue(result.getResponse().getStatus() == 400);
+		
+		MvcResult result2 = mvc.perform(post("/notification/email")
+				.content(invalidEmailJson)
+				.contentType("application/json"))
 				.andDo(print())
 				.andExpect(status().is4xxClientError())
 				.andReturn();
-		assertTrue(result.getResponse().getErrorMessage().contains(MISSING_PARAMETER_RESPONSE));
-	}
-	
-	@Test
-	public void testEmailControllerInvalidMessage() throws Exception {
-		//Invalid Message
-		MvcResult result = mvc.perform(post("/notification/email")
-				.param("subject", EmailTest.VALID_CONTENT)
-				.param("message", EmailTest.EMPTY_CONTENT)
-				.param("recipient", "test@test.com"))
-				.andDo(print())
-				.andExpect(status().is4xxClientError())
-				.andReturn();
-		assertTrue(result.getResponse().getErrorMessage().contains(MOCK_ERROR_RESPONSE_400));
-		 result = mvc.perform(post("/notification/email")
-				.param("subject", EmailTest.VALID_CONTENT)
-				.param("recipient", "test@test.com"))
-				.andDo(print())
-				.andExpect(status().is4xxClientError())
-				.andReturn();
-		assertTrue(result.getResponse().getErrorMessage().contains(MISSING_PARAMETER_RESPONSE));
-	}
-	
-	@Test 
-	public  void testEmailControllerInvalidRecipient() throws Exception {
-		//Invalid Recipient
-		MvcResult result = mvc.perform(post("/notification/email")
-				.param("subject", EmailTest.VALID_CONTENT)
-				.param("message", EmailTest.VALID_CONTENT)
-				.param("recipient", "testtestcom"))
-				.andDo(print())
-				.andExpect(status().is4xxClientError())
-				.andReturn();
-		assertTrue(result.getResponse().getErrorMessage().contains(MOCK_ERROR_RESPONSE_400));
-		 result = mvc.perform(post("/notification/email")
-				.param("subject", EmailTest.VALID_CONTENT)
-				.param("message", EmailTest.VALID_CONTENT)
-				.param("recipient", EmailTest.EMPTY_CONTENT))
-				.andDo(print())
-				.andExpect(status().is4xxClientError())
-				.andReturn();
-		assertTrue(result.getResponse().getErrorMessage().contains(MOCK_ERROR_RESPONSE_400));
-		 result = mvc.perform(post("/notification/email")
-				.param("subject", EmailTest.VALID_CONTENT)
-				.param("message", EmailTest.VALID_CONTENT))
-				.andDo(print())
-				.andExpect(status().is4xxClientError())
-				.andReturn();
-		assertTrue(result.getResponse().getErrorMessage().contains(MISSING_PARAMETER_RESPONSE));
+		assertTrue(result2.getResponse().getErrorMessage().contains("No recipient email addresses provided."));
 	}
 }

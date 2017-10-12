@@ -1,4 +1,4 @@
-package gov.usgs.wma.mlrnotification;
+package gov.usgs.wma.mlrnotification.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;

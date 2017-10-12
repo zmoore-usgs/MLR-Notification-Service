@@ -1,6 +1,5 @@
 mlrNotificationServicePwd: ${MLR_NOTIFICATION_SERVICE_PWD}
 mlrEmailTemplateFrom: ${MLR_NOTIFICATION_EMAIL_FROM}
-mlrEmailTemplateText: ${MLR_NOTIFICATION_EMAIL_TEXT}
 spring:
   mail:
     host: ${MLR_NOTIFICATION_EMAIL_HOST}
