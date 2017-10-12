@@ -37,39 +37,7 @@ public class ControllerTest {
 	private final String validEmailJsonWithoutSenderNoServer = "{\"to\": [\"test@test.com\"], \"textBody\": \"test2\", \"subject\": \"test\"}";
 	private final String invalidEmailJson = "{\"from\": \"test@test.net\", \"textBody\": \"test\", \"subject\": \"test\"}";
 	private final String malformedEmailJson = "{\"from\": \"test@test.net\" \"textBody\": \"test\", \"subject\": \"test\"}";
-	private final Email validEmailWithSender  = new Email();
-	private final Email validEmailWithoutSender  = new Email();
-	private final Email validEmailWithoutSenderNoServer = new Email();
-	private final Email invalidEmail  = new Email();
-	
-	@Before
-	public void setup() {
-		ArrayList<String> toList = new ArrayList<>();
-		toList.add("test@test.com");
-		
-		//Setup Valid Email with Sender to mirror validEmailJsonWithSender
-		validEmailWithSender.setTo(toList);
-		validEmailWithSender.setFrom("test@test.net");
-		validEmailWithSender.setSubject("test");
-		validEmailWithSender.setTextBody("test");
-		
-		//Setup Valid Email without Sender to mirror validEmailJsonWithoutSender
-		validEmailWithoutSender.setTo(toList);
-		validEmailWithoutSender.setFrom("test@test.net");
-		validEmailWithoutSender.setSubject("test");
-		validEmailWithoutSender.setTextBody("test");
-		
-		//Setup Valid Email without Sender to mirror validEmailJsonWithoutSender
-		validEmailWithoutSenderNoServer.setTo(toList);
-		validEmailWithoutSenderNoServer.setFrom("test@test.net");
-		validEmailWithoutSenderNoServer.setSubject("test2");
-		validEmailWithoutSenderNoServer.setTextBody("test");
-		
-		//Setup Invalid Email to mirror invalidEmailJson
-		invalidEmail.setFrom("test@test.net");
-		invalidEmail.setSubject("test");
-		invalidEmail.setTextBody("test");
-	}
+	private final String validEmailJsonWithOptional = "{\"to\": [\"test@test.com\"], \"from\": \"test@test.net\", \"htmlBody\": \"test\", \"subject\": \"test\", \"cc\": [\"test@test.com\"], \"bcc\": [\"test@test.com\"], \"replyTo\": \"test@test.net\"}";
 	
 	@Test
 	public void testEmailControllerValidDataWithSender() throws Exception {
@@ -103,6 +71,16 @@ public class ControllerTest {
 				.andExpect(status().is5xxServerError())
 				.andReturn();
 		assertTrue(result.getResponse().getErrorMessage().contains(MOCK_ERROR_RESPONSE_500));
+	}
+	
+	@Test
+	public void testEmailControllerValidDataWithOptional() throws Exception {
+		given(emailHandler.sendEmail(any(Email.class))).willReturn(null);
+		//Valid Subject, Message, Recipient, and Sender
+		mvc.perform(post("/notification/email")
+				.content(validEmailJsonWithOptional)
+				.contentType("application/json"))
+				.andExpect(status().isOk());
 	}
 
 	@Test
