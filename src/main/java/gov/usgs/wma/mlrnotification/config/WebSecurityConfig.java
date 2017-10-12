@@ -1,4 +1,4 @@
-package gov.usgs.wma.mlrnotification;
+package gov.usgs.wma.mlrnotification.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
