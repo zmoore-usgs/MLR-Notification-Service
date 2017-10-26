@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import gov.usgs.wma.mlrnotification.model.Email;
 import java.io.IOException;
 import javax.servlet.http.HttpServletResponse;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
@@ -17,6 +18,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 @RestController
 @RequestMapping("/notification")
 public class Controller {
+	private Logger log = Logger.getLogger(Controller.class);
+	
 	@Autowired
 	public EmailNotificationHandler emailHandler;
 	
@@ -35,6 +38,7 @@ public class Controller {
 		try {
 			email = mapper.readValue(emailJson, emailType);
 		} catch(Exception e) {
+			log.error(e.getMessage());
 			response.sendError(HttpStatus.BAD_REQUEST.value(),"Unable to parse request body as email JSON. Body: " + emailJson);
 			return;
 		}
