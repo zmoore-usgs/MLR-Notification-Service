@@ -6,5 +6,5 @@ ADD docker-entrypoint.sh entrypoint.sh
 RUN ["chmod", "+x", "entrypoint.sh"]
 
 RUN  curl -k -X GET "https://cida.usgs.gov/artifactory/mlr-maven-centralized/gov/usgs/wma/mlrNotification/$mlr_version/mlrNotification-$mlr_version.jar" > app.jar
-EXPOSE 8080
+EXPOSE 8443
 ENTRYPOINT [ "sh", "-c", "java -Djava.security.egd=file:/dev/./urandom -jar app.jar"]
