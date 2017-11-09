@@ -11,6 +11,6 @@ if [ $use_doi_cert = true ] ; then curl -o root.crt http://sslhelp.doi.net/docs/
 if [ $use_doi_cert = true ] ; then keytool  -importcert -file root.crt -alias doi -keystore $keystoreLocation -storepass $keystorePassword -noprompt; fi
 
 keytool -list -keystore $keystoreLocation -storepass $keystorePassword
-java -Djava.security.egd=file:/dev/./urandom -DkeystorePassword=$keystorePassword -jar app.war
+java -Djava.security.egd=file:/dev/./urandom -DkeystorePassword=$keystorePassword -jar app.jar
 
 exec $?
