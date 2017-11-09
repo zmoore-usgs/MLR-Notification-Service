@@ -6,3 +6,17 @@ spring:
     port: ${MLR_NOTIFICATION_EMAIL_PORT}
     defaultEncoding: UTF-8
     protocol: smtp
+
+security:
+  basic:
+    enabled: false
+  require-ssl: true
+
+server:
+    port: ${serverPort:8443}
+    ssl:
+        key-store: ${keystoreLocation}
+        key-store-password: ${keystorePassword}
+        key-password: ${keystorePassword}
+        key-alias: ${keystoreSSLKey:tomcat}
+
