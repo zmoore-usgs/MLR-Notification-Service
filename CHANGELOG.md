@@ -6,7 +6,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 ### Added
-- Global exception handler for Http requests
+- Global exception handler for Http requests 
+- Authentication to the /notification endpoint
 
 ### Changed
 - Modified the error messages returned by the application to be more concise and not include internal application information such as class names.

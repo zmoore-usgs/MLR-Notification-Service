@@ -8,9 +8,10 @@ MLR Service to Email Processing Result Notifications to Users
 Copy the application-test.yml file from the project root directory to an "application.yml" file also at the project root directory and change the values as needed.
 Open a terminal and cd to the project root directory. Within this directory run 
 ```
-mvn spring-boot:run
+mvn spring-boot:run -Djavax.net.ssl.trustStore=/absolute/path/to/your/trust-store.jks -Djavax.net.ssl.trustStorePassword=yourtruststoresreadme
 ``` 
-and then the application will launch and be available at http://localhost:8080/swagger-ui.html
+and then the application will launch and be available at http://localhost:8080/swagger-ui.html. 
+The two parameters are needed if the authPublicKeyUrl requires a certificate. The trust store should contain the certificate for that url.
 
 ## Using Docker
 This docker image is designed to be used with Docker Swarm and as such it uses Docker Secrets for passing in configuration.

@@ -11,7 +11,7 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 
 @Service
 public class EmailNotificationHandler {
-	@Autowired
+	@Autowired 
 	public JavaMailSender mailSender;
 	private static final Logger LOG = LoggerFactory.getLogger(EmailNotificationHandler.class);
 		
