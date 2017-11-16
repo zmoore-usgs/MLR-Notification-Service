@@ -1,9 +1,9 @@
 package gov.usgs.wma.mlrnotification;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import gov.usgs.wma.mlrnotification.model.Email;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import java.io.IOException;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.log4j.Logger;
@@ -28,6 +28,9 @@ public class Controller {
 	@Value("${mlrEmailTemplateFrom}")
 	private String templateFrom;
 
+	@ApiResponses(value={@ApiResponse(code=200, message="OK"),
+			@ApiResponse(code=400, message="Bad Request"),
+			@ApiResponse(code=401, message="Unauthorized")})
 	@PostMapping(value = "/email", produces = "application/json")
 	public void createEmailNotification(@RequestBody Email emailJson, HttpServletResponse response)  throws IOException{
 		response.setContentType("application/json;charset=UTF-8");
