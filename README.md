@@ -13,7 +13,7 @@ mvn spring-boot:run -Djavax.net.ssl.trustStore=/absolute/path/to/your/trust-stor
 and then the application will launch and be available at http://localhost:8080/swagger-ui.html. 
 The two parameters are needed if the authPublicKeyUrl requires a certificate. The trust store should contain the certificate for that url.
 
-# Profiles
+## Profiles
 This application has two built-in Spring Profiles to aid with local development.
 
 The **default** profile will enable Authentication. The **swagger** profile will enable the swagger documentation. By
