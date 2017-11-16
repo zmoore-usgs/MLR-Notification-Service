@@ -31,13 +31,13 @@ public class Controller {
 	@PostMapping(value = "/email", produces = "application/json")
 	public void createEmailNotification(@RequestBody Email emailJson, HttpServletResponse response)  throws IOException{
 		response.setContentType("application/json;charset=UTF-8");
-		String validationStatus = emailJson.validate();
 		
+		//Check for user provded "from" address
+		if(emailJson.getFrom() == null || emailJson.getFrom().length() == 0){
+			emailJson.setFrom(templateFrom);
+		}
+		String validationStatus = emailJson.validate();
 		if (validationStatus == null) {
-			//Check for user provded "from" address
-			if(emailJson.getFrom() == null || emailJson.getFrom().length() == 0){
-				emailJson.setFrom(templateFrom);
-			}
 			String sendStatus = emailHandler.sendEmail(emailJson);
 
 			if(sendStatus != null){
