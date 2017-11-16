@@ -3,6 +3,7 @@ package gov.usgs.wma.mlrnotification;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import gov.usgs.wma.mlrnotification.model.Email;
+import io.swagger.annotations.Api;
 import java.io.IOException;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.log4j.Logger;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestBody;
 
+@Api(tags="Notification Service")
 @RestController
 @RequestMapping("/notification")
 public class Controller {
@@ -27,7 +29,7 @@ public class Controller {
 	private String templateFrom;
 
 	@PostMapping(value = "/email", produces = "application/json")
-	public void createEmailNotification(@RequestBody String emailJson, HttpServletResponse response)  throws IOException{
+	public void createEmailNotification(@RequestBody Email emailJson, HttpServletResponse response)  throws IOException{
 		response.setContentType("application/json;charset=UTF-8");
 		
 		//Deserialize Email

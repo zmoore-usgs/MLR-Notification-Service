@@ -1,13 +1,12 @@
 package gov.usgs.wma.mlrnotification.model;
 
 import java.util.List;
+import javax.validation.constraints.NotNull;
 import org.apache.commons.validator.routines.EmailValidator;
 
-/**
- *
- * @author zmoore
- */
+
 public class  Email {
+	@NotNull
 	private List<String> to;
 	private List<String> cc;
 	private List<String> bcc;
