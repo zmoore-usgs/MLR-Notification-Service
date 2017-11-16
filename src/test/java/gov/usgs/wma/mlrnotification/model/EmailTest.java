@@ -1,8 +1,7 @@
-package gov.usgs.wma.mlrnotification.email;
+package gov.usgs.wma.mlrnotification.model;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import gov.usgs.wma.mlrnotification.model.Email;
 import java.util.ArrayList;
 import static org.junit.Assert.assertEquals;
 import org.junit.Before;
