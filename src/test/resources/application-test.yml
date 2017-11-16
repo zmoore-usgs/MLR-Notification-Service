@@ -6,3 +6,4 @@ spring:
     port: 25564
     defaultEncoding: UTF-8
     protocol: smtp
+    

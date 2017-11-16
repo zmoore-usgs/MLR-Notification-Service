@@ -20,7 +20,7 @@ import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.context.request.WebRequest;
 
 public class GlobalDefaultExceptionHandlerTest {
-@Mock
+	@Mock
 	WebRequest request;
 
 	private GlobalDefaultExceptionHandler controller = new GlobalDefaultExceptionHandler();

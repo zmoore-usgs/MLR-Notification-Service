@@ -10,6 +10,12 @@ spring:
 security:
   basic:
     enabled: false
+  oauth2:
+    resource:
+      filter-order: 3
+      id: ${oauthResourceId:oauth2-resource}
+      jwt:
+        keyUri: ${authPublicKeyUrl}
   require-ssl: true
 
 server:
@@ -19,4 +25,7 @@ server:
         key-store-password: ${keystorePassword}
         key-password: ${keystorePassword}
         key-alias: ${keystoreSSLKey:tomcat}
+        
+keystoreLocation : ${keystoreLocation}
+keystorePassword: ${keystorePassword}
 
