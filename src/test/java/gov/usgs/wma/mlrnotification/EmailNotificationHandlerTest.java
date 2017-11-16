@@ -25,7 +25,7 @@ public class EmailNotificationHandlerTest {
 	@Autowired
 	private EmailNotificationHandler emailHandler;
 
-private GreenMail testSmtp;
+	private GreenMail testSmtp;
 
 	@Value("${spring.mail.port}")
 	private int smtpPort;

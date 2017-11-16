@@ -17,6 +17,3 @@ security:
       jwt:
         keyUri: http://fake.gov/oauth/token_key
   require-ssl: false
-
-server:
-    port: 8080
