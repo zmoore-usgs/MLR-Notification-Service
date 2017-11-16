@@ -19,7 +19,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-@ActiveProfiles("Test")
+@ActiveProfiles("test")
 public class EmailNotificationHandlerTest {
 	
 	@Autowired
