@@ -7,3 +7,16 @@ spring:
     defaultEncoding: UTF-8
     protocol: smtp
     
+security:
+  basic:
+    enabled: false
+  oauth2:
+    resource:
+      filter-order: 3
+      id: trusted-app
+      jwt:
+        keyUri: http://fake.gov/oauth/token_key
+  require-ssl: false
+
+server:
+    port: 8080
