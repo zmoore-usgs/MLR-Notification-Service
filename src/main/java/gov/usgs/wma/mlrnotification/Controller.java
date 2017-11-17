@@ -9,7 +9,6 @@ import io.swagger.annotations.ApiResponses;
 import java.io.IOException;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
@@ -24,8 +23,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 @RestController
 @RequestMapping("/notification")
 public class Controller {
-	private Logger log = Logger.getLogger(Controller.class);
-	
+		
 	@Autowired
 	public EmailNotificationHandler emailHandler;
 	
