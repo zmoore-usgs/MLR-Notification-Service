@@ -1,16 +1,20 @@
 package gov.usgs.wma.mlrnotification;
 
 import gov.usgs.wma.mlrnotification.model.Email;
+
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+
 import java.io.IOException;
 import javax.servlet.http.HttpServletResponse;
+
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
 import org.springframework.http.HttpStatus;
+
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -49,7 +53,7 @@ public class Controller {
 				response.setStatus(HttpStatus.OK.value());
 			} 
 		} else {			
-				response.sendError(HttpStatus.BAD_REQUEST.value(), validationStatus);			
+			response.sendError(HttpStatus.BAD_REQUEST.value(), validationStatus);			
 		}
 	}
 }
