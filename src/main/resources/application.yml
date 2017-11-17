@@ -6,6 +6,8 @@ spring:
     port: ${MLR_NOTIFICATION_EMAIL_PORT}
     defaultEncoding: UTF-8
     protocol: smtp
+  profiles:
+    active: default, swagger
 
 security:
   basic:
