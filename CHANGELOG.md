@@ -5,9 +5,12 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html). (Patch version X.Y.0 is implied if not specified.)
 
 ## [Unreleased]
+
+## [0.5]
 ### Added
 - Global exception handler for Http requests 
 - Authentication to the /notification endpoint
+- HTTPS Support
 
 ### Changed
 - Modified the error messages returned by the application to be more concise and not include internal application information such as class names.
@@ -39,7 +42,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - Docker secret support for including a full application.yml for a Spring Application.
 
-[Unreleased]: https://github.com/USGS-CIDA/MLR-Notification-Service/compare/mlrNotification-0.4...master
+[Unreleased]: https://github.com/USGS-CIDA/MLR-Notification-Service/compare/mlrNotification-0.5...master
+[0.5]: https://github.com/USGS-CIDA/MLR-Notification-Service/compare/mlrNotification-0.4...mlrNotification-0.5
 [0.4]: https://github.com/USGS-CIDA/MLR-Notification-Service/compare/mlrNotification-0.3...mlrNotification-0.4
 [0.3]: https://github.com/USGS-CIDA/MLR-Notification-Service/compare/mlrNotification-0.1...mlrNotification-0.3
  
