@@ -27,7 +27,4 @@ server:
         key-store-password: ${keystorePassword}
         key-password: ${keystorePassword}
         key-alias: ${keystoreSSLKey:tomcat}
-        
-keystoreLocation : ${keystoreLocation}
-keystorePassword: ${keystorePassword}
 
