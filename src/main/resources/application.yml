@@ -10,15 +10,19 @@ spring:
     active: default, swagger
 
 security:
+  require-ssl: true
   basic:
     enabled: false
   oauth2:
+    client:
+      clientId: ${oauthClientId}
+      clientSecret: ${oauthClientSecret}
+      accessTokenUri: ${oauthClientAccessTokenUri}
+      userAuthorizationUri: ${oauthClientAuthorizationUri}
     resource:
-      filter-order: 3
-      id: ${oauthResourceId:oauth2-resource}
+      id: ${oauthResourceId}
       jwt:
-        keyUri: ${authPublicKeyUrl}
-  require-ssl: true
+        keyUri: ${oauthResourceTokenKeyUri}
 
 server:
     port: ${serverPort:8443}
