@@ -20,7 +20,8 @@ security:
       accessTokenUri: ${oauthClientAccessTokenUri}
       userAuthorizationUri: ${oauthClientAuthorizationUri}
     resource:
-      id: ${oauthResourceId}
+      filter-order: 3
+      id: ${oauthResourceId:oauth2-resource}
       jwt:
         keyUri: ${oauthResourceTokenKeyUri}
 
