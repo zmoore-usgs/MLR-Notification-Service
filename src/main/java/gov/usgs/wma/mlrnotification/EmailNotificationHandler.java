@@ -5,8 +5,11 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 import gov.usgs.wma.mlrnotification.model.Email;
+import java.nio.charset.Charset;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.core.io.InputStreamSource;
 import org.springframework.mail.javamail.MimeMessageHelper;
 
 @Service
@@ -14,7 +17,7 @@ public class EmailNotificationHandler {
 	@Autowired 
 	public JavaMailSender mailSender;
 	private static final Logger LOG = LoggerFactory.getLogger(EmailNotificationHandler.class);
-		
+	public static final String DEFAULT_ATTACHMENT_FILENAME = "attachment";
 	public String sendEmail(Email email){
 		try {
 			//Build mime message from data
@@ -45,10 +48,17 @@ public class EmailNotificationHandler {
 				mailBuilder.setReplyTo(email.getReplyTo());
 			}
 			
+			String attachmentFileName = null == email.getAttachmentFileName() ? DEFAULT_ATTACHMENT_FILENAME : email.getAttachmentFileName();
+			String attachment = email.getAttachment();
+			if(null != attachment) {
+				InputStreamSource attachmentSource = new ByteArrayResource(attachment.getBytes(Charset.forName("UTF-8")));
+				mailBuilder.addAttachment(attachmentFileName, attachmentSource);
+			}
+			
 			//Send mime message
 			mailSender.send(mailBuilder.getMimeMessage());
 		} catch(Exception ex) {
-			LOG.error(ex.getMessage() + "\nStack Trace:\n" + ex.getStackTrace());
+			LOG.error("error sending email", ex);
 			return ex.getMessage() != null ? ex.getMessage() : ex.toString();
 		}
 		

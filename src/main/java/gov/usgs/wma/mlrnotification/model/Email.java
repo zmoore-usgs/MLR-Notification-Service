@@ -14,6 +14,8 @@ public class  Email {
 	private String replyTo;
 	private String textBody;
 	private String htmlBody;
+	private String attachment;
+	private String attachmentFileName;
 	
 	public List<String> getTo() {
 		return to;
@@ -79,6 +81,22 @@ public class  Email {
 		this.htmlBody = htmlBody;
 	}
 	
+	public String getAttachment() {
+		return attachment;
+	}
+
+	public void setAttachment(String attachment) {
+		this.attachment = attachment;
+	}
+	
+	public String getAttachmentFileName() {
+		return attachmentFileName;
+	}
+
+	public void setAttachmentFileName(String attachmentFileName) {
+		this.attachmentFileName = attachmentFileName;
+	}
+	
 	private String validateRequiredParameters() {
 		//Validate To
 		if(getTo() != null && getTo().size() > 0) {
@@ -139,6 +157,14 @@ public class  Email {
 			if(!EmailValidator.getInstance(false).isValid(getReplyTo())) {
 				return "The provided reply to email address is invalid: " + getReplyTo();
 			}
+		}
+		
+		if(null != this.attachment && attachment.isEmpty()) {
+			return "The attachment was empty, but it should be non-empty.";
+		}
+		
+		if(null != this.attachmentFileName && attachmentFileName.isEmpty()) {
+			return "The attachment filename was empty, but it should be non-empty.";
 		}
 		
 		return null;
