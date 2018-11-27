@@ -1,9 +1,7 @@
 package gov.usgs.wma.mlrnotification;
 
 import gov.usgs.wma.mlrnotification.model.Email;
-import java.util.ArrayList;
 import static org.junit.Assert.assertTrue;
-import org.junit.Before;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import org.junit.Test;
