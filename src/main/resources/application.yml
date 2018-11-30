@@ -1,5 +1,12 @@
-mlrNotificationServicePwd: ${MLR_NOTIFICATION_SERVICE_PWD}
-mlrEmailTemplateFrom: ${MLR_NOTIFICATION_EMAIL_FROM}
+server:
+  port: ${serverPort:8443}
+  ssl:
+    key-store: ${keystoreLocation}
+    key-store-password: ${keystorePassword}
+    key-password: ${keystorePassword}
+    key-alias: ${keystoreSSLKey:tomcat}
+    enabled-protocols: TLSv1.2
+
 spring:
   mail:
     host: ${MLR_NOTIFICATION_EMAIL_HOST}
@@ -20,11 +27,5 @@ security:
         keyUri: ${oauthResourceTokenKeyUri}
   require-ssl: true
 
-server:
-    port: ${serverPort:8443}
-    ssl:
-        key-store: ${keystoreLocation}
-        key-store-password: ${keystorePassword}
-        key-password: ${keystorePassword}
-        key-alias: ${keystoreSSLKey:tomcat}
-
+mlrNotificationServicePwd: ${MLR_NOTIFICATION_SERVICE_PWD}
+mlrEmailTemplateFrom: ${MLR_NOTIFICATION_EMAIL_FROM}
