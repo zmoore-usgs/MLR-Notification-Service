@@ -27,3 +27,6 @@ hs_err_pid*
 /application.yml
 /.env
 /mlrLegacyServiceDev.env
+
+#IDE Directories
+.vscode
