@@ -30,6 +30,8 @@ public class OAuth2ResourceServerConfig extends ResourceServerConfigurerAdapter 
 	@Value("${security.oauth2.resource.id}")
 	private String resourceId;
 
+	private final ObjectMapper mapper = new ObjectMapper();
+
 	@Override
 	public void configure(HttpSecurity http) throws Exception {
 		http
@@ -62,11 +64,8 @@ public class OAuth2ResourceServerConfig extends ResourceServerConfigurerAdapter 
 						final Map<String, Object> mapBodyException = new HashMap<>() ;
 
 						mapBodyException.put("error_message", authException.getMessage()) ;
-				
 						response.setContentType("application/json") ;
 						response.setStatus(HttpServletResponse.SC_UNAUTHORIZED) ;
-				
-						final ObjectMapper mapper = new ObjectMapper() ;
 						mapper.writeValue(response.getOutputStream(), mapBodyException) ;
 			}
 		};
