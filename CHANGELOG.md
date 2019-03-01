@@ -33,7 +33,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Changed
 - application.yml to conform to other services' oauth config naming conventions
 
-## [0.5]
+## [0.5] - 2017-11-03
 ### Added
 - Global exception handler for Http requests 
 - Authentication to the notification endpoint
@@ -45,20 +45,20 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
 - Added additional logging of JSON parsing errors
 
-## [0.4]
+## [0.4] - 2017-10-18
 ### Changed
 - Modified the Send Email endpoint to consume a JSON email descriptor rather than use URL query parameters
 - Can now specify an email sender (falls back to sender configured in the environment variables)
 
-## [0.3]
+## [0.3] - 2017-10-02
 ### Changed
 - Fixed incorrect distribution management section of the POM file.
 
-## 0.2
+## 0.2 - 2017-10-02
 ### Added
 - No changes, burned release number
 
-## 0.1
+## 0.1 - 2017-10-02
 ### Added
 - Initial integration of Spring Email with DOI SMTP to allow sending emails from the application through the DOI Email Server.
 
