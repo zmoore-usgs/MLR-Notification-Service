@@ -20,7 +20,7 @@
       build: .
       image: mlr-notification-service
       ports:
-        - "443:443"
+        - "6025:6025"
       << : *secrets-config
       volumes: 
       - ./docker/certificates/import_certs:/certificates:ro
@@ -33,7 +33,7 @@
       image: mlr-notification-service
       network_mode: "host"
       ports:
-        - "443:443"
+        - "6025:6025"
       << : *secrets-config
       volumes: 
         - ./docker/certificates/import_certs:/certificates:ro
@@ -46,7 +46,7 @@
       image: mlr-notification-service
       network_mode: "host"
       ports:
-        - "443:443"
+        - "6025:6025"
         - "8000:8000"
       << : *secrets-config
       volumes: 
