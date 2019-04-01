@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html). (Patch version X.Y.0 is implied if not specified.)
 
+## [Unreleased]
+## Added
+- docker-related files to combine service and docker repos
+
+## Changed
+- dockerfile pulls version 0.0.4 wma-spring-boot-base docker image from dockerhub
+
 ## [0.7.2] - 2019-03-01
 ### Changed
 - Standardized error message JSON format. 
