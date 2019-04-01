@@ -3,7 +3,7 @@
 
   env:
     global:
-      - DOCKER_COMPOSE_VERSION=1.22
+      - DOCKER_COMPOSE_VERSION=1.22.0
       - DOCKER_IMAGE=mlr-notification-service
       - SPRING_BOOT_BASE_IMAGE_VERSION=latest
 
