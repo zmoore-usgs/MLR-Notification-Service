@@ -16,9 +16,9 @@
       file: ./docker/certificates/tomcat-wildcard.key
 
   services:
-    mlr-notification-service:
+    mlr-notification:
       build: .
-      image: mlr-notification-service
+      image: mlr-notification
       ports:
         - "6025:6025"
       << : *secrets-config
@@ -28,9 +28,9 @@
         - ./docker/config.env
         - ./docker/secrets.env
       
-    mlr-notification-service-local-dev:
+    mlr-notification-local-dev:
       build: .
-      image: mlr-notification-service
+      image: mlr-notification
       network_mode: "host"
       ports:
         - "6025:6025"
@@ -41,9 +41,9 @@
         - ./docker/config.env
         - ./docker/secrets.env
 
-    mlr-notification-service-debug:
+    mlr-notification-debug:
       build: .
-      image: mlr-notification-service
+      image: mlr-notification
       network_mode: "host"
       ports:
         - "6025:6025"
