@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html). (Patch version X.Y.0 is implied if not specified.)
 
 ## [Unreleased]
+
+## [0.8.0] - 2019-04-12 - End of Pilot
 ## Added
 - docker-related files to combine service and docker repos
 
@@ -76,7 +78,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - Docker secret support for including a full application.yml for a Spring Application.
 
-[Unreleased]: https://github.com/USGS-CIDA/MLR-Notification-Service/compare/mlrNotification-0.7.2...master
+[Unreleased]: https://github.com/USGS-CIDA/MLR-Notification-Service/compare/mlrNotification-0.8.0...master
+[0.8.0]: https://github.com/USGS-CIDA/MLR-Notification-Service/compare/mlrNotification-0.7.2...mlrNotification-0.8.0
 [0.7.2]: https://github.com/USGS-CIDA/MLR-Notification-Service/compare/mlrNotification-0.7.1...mlrNotification-0.7.2
 [0.7.1]: https://github.com/USGS-CIDA/MLR-Notification-Service/compare/mlrNotification-0.7...mlrNotification-0.7.1
 [0.7]: https://github.com/USGS-CIDA/MLR-Notification-Service/compare/mlrNotification-0.6...mlrNotification-0.7
