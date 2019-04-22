@@ -1,8 +1,14 @@
 # MLR-Notification-Service
 [![Build Status](https://travis-ci.org/USGS-CIDA/MLR-Notification-Service.svg?branch=master)](https://travis-ci.org/USGS-CIDA/MLR-Notification-Service) [![Coverage Status](https://coveralls.io/repos/github/USGS-CIDA/MLR-Notification-Service/badge.svg?branch=master)](https://coveralls.io/github/USGS-CIDA/MLR-Notification-Service?branch=master)
 
+## Service Description
+This service is part of the MLR microservices and is responsible for creating and sending emails to users when their workflows are finished processing. The service does not generate the content of the email itself, but rather expects that to be sent as part of the request to send the email. The service uses a JSON input format to describe the content of the email including the recipients, any CC or BCC recipients, the content type (HTML or Plaintext), the subject, the content, and any attachments. Having the service mostly devoid of any business logic, outside the scope of converting that JSON document to an email and sending it, allows it to be extremely flexible and potentially useful outside the scope of just MLR in the future.
 
-MLR Service to Email Processing Result Notifications to Users
+The service can be heavily configured including the mail server to use and default values for several parameters such as the email sender ("from" field).
+
+The service has only a single business logic API method, which is a POST method at `/email` which sends an email using the provided JSON request body. Specifics about this API method can be read from the service Swagger API documentation.
+
+This service is always the last step of MLR Gateway workflows and is only contacted once per workflow run. It has been discussed to further utilize this service within MLR to send notification emails to Operations when certain parts of workflows fail, but this is not currently implemented.
 
 ## Running the Application
 Copy the application-test.yml file from the project root directory to an "application.yml" file also at the project root directory and change the values as needed.
