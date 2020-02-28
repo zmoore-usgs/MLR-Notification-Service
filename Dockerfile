@@ -5,6 +5,11 @@ FROM maven@sha256:b37da91062d450f3c11c619187f0207bbb497fc89d265a46bbc6dc5f17c02a
 # https://github.com/carlossg/docker-maven/issues/92
 # FROM maven:3-jdk-8-slim AS build
 
+RUN if getent ahosts "sslhelp.doi.net" > /dev/null 2>&1; then \
+                wget 'https://s3-us-west-2.amazonaws.com/prod-owi-resources/resources/InstallFiles/SSL/DOIRootCA.cer' && \
+                keytool -import -trustcacerts -file DOIRootCA.cer -alias DOIRootCA2.cer -keystore $JAVA_HOME/jre/lib/security/cacerts -noprompt -storepass changeit; \
+        fi
+
 COPY pom.xml /build/pom.xml
 WORKDIR /build
 
