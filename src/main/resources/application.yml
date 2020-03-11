@@ -27,5 +27,4 @@ security:
         keyUri: ${oauthResourceTokenKeyUri}
   require-ssl: true
 
-mlrNotificationServicePwd: ${MLR_NOTIFICATION_SERVICE_PWD}
 mlrEmailTemplateFrom: ${MLR_NOTIFICATION_EMAIL_FROM}
