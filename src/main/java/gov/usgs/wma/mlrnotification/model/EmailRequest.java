@@ -1,10 +1,11 @@
 package gov.usgs.wma.mlrnotification.model;
 
 import java.util.List;
+
 import org.apache.commons.validator.routines.EmailValidator;
 
 
-public class  Email {
+public class  EmailRequest {
 	private List<String> to;
 	private List<String> cc;
 	private List<String> bcc;

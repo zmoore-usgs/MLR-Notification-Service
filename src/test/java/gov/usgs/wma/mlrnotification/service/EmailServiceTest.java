@@ -1,8 +1,12 @@
-package gov.usgs.wma.mlrnotification;
+package gov.usgs.wma.mlrnotification.service;
 
 import com.icegreen.greenmail.util.GreenMail;
 import com.icegreen.greenmail.util.ServerSetup;
-import gov.usgs.wma.mlrnotification.model.Email;
+import gov.usgs.wma.mlrnotification.model.EmailRequest;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -16,38 +20,34 @@ import javax.mail.MessagingException;
 import javax.mail.Multipart;
 import javax.mail.Part;
 import javax.mail.internet.MimeMessage;
-import org.junit.After;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.util.StringUtils;
 
-@RunWith(SpringRunner.class)
 @SpringBootTest
 @ActiveProfiles("test")
-public class EmailNotificationHandlerTest {
+public class EmailServiceTest {
 	
 	@Autowired
-	private EmailNotificationHandler emailHandler;
+	private EmailService emailService;
 
 	private GreenMail testSmtp;
 
 	@Value("${spring.mail.port}")
 	private int smtpPort;
 		
-	private Email validEmail;
+	private EmailRequest validEmail;
 	
 	private final String validText = "test";
 	private final String validAddress = "test@test.com";
 	
-	@Before
+	@BeforeEach
 	public void setup() {
 		ArrayList<String> toList = new ArrayList<>();
 		toList.add(validAddress);
@@ -56,7 +56,7 @@ public class EmailNotificationHandlerTest {
 		testSmtp = new GreenMail(new ServerSetup(smtpPort, null, "smtp"));
 		testSmtp.start();
 		
-		validEmail = new Email();
+		validEmail = new EmailRequest();
 		validEmail.setTo(toList);
 		validEmail.setFrom(validAddress);
 		validEmail.setSubject(validText);
@@ -67,7 +67,7 @@ public class EmailNotificationHandlerTest {
 	@Test
 	public void testEmailSendValidData() throws Exception {
 		//Send Valid Email to Valid Recipient - Expect Valid Response and Equivalent Data
-		String status = emailHandler.sendEmail(validEmail);
+		String status = emailService.sendEmail(validEmail);
 		assertEquals(status, null);
 		
 		//Verify Received Emails
@@ -90,7 +90,7 @@ public class EmailNotificationHandlerTest {
 		validEmail.setReplyTo(validAddress);
 		validEmail.setFrom(validAddress);
 		
-		String status = emailHandler.sendEmail(validEmail);
+		String status = emailService.sendEmail(validEmail);
 		assertEquals(status, null);
 		
 		//Verify Received Emails
@@ -108,13 +108,13 @@ public class EmailNotificationHandlerTest {
 		//Send to Invalid Recipient - Expect Valid Response
 		toList.add("test");
 		validEmail.setTo(toList);
-		assertEquals(emailHandler.sendEmail(validEmail), null);
+		assertEquals(emailService.sendEmail(validEmail), null);
 		
 		//Send to Missing Recipient - Expect Error Response
 		toList.clear();
 		toList.add(null);
 		validEmail.setTo(toList);
-		assertTrue(emailHandler.sendEmail(validEmail).contains("java.lang.NullPointerException"));
+		assertTrue(emailService.sendEmail(validEmail).contains("java.lang.NullPointerException"));
 		
 		//Verify Recieved Emails
 		MimeMessage[] receivedMessages = testSmtp.getReceivedMessages();
@@ -146,8 +146,10 @@ public class EmailNotificationHandlerTest {
 			String fileName = bodyPart.getFileName();
 
 			InputStream is = bodyPart.getInputStream();
-			Scanner s = new Scanner(is).useDelimiter("\\A");
+			Scanner s = new Scanner(is);
+			s.useDelimiter("\\A");
 			String fileContents = s.hasNext() ? s.next() : "";
+			s.close();
 
 			attachments.put(fileName, fileContents);
 		}
@@ -159,7 +161,7 @@ public class EmailNotificationHandlerTest {
 		//Send Valid Email to Valid Recipient - Expect Valid Response and Equivalent Data
 		final String ATTACHED_DATA = "H20";
 		validEmail.setAttachment(ATTACHED_DATA);
-		String status = emailHandler.sendEmail(validEmail);
+		String status = emailService.sendEmail(validEmail);
 		assertEquals(status, null);
 		
 		//Verify Received Emails
@@ -174,7 +176,7 @@ public class EmailNotificationHandlerTest {
 		//Verify attachment
 		Map<String, String> attachments = getAttachments(msg);
 		assertEquals(1, attachments.size());
-		String actualData = attachments.get(EmailNotificationHandler.DEFAULT_ATTACHMENT_FILENAME);
+		String actualData = attachments.get(EmailService.DEFAULT_ATTACHMENT_FILENAME);
 		assertEquals(ATTACHED_DATA, actualData);
 	}
 	
@@ -186,7 +188,7 @@ public class EmailNotificationHandlerTest {
 		final String ATTACHED_FILE_NAME = "mlr.json";
 		validEmail.setAttachmentFileName(ATTACHED_FILE_NAME);
 		
-		String status = emailHandler.sendEmail(validEmail);
+		String status = emailService.sendEmail(validEmail);
 		assertEquals(status, null);
 		
 		//Verify Received Emails
@@ -205,7 +207,7 @@ public class EmailNotificationHandlerTest {
 		assertEquals(ATTACHED_DATA, actualData);
 	}
 	
-	@After
+	@AfterEach
 	public void shutdown() {
 		testSmtp.stop();
 	}		

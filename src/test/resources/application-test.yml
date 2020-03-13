@@ -1,19 +1,21 @@
-mlrNotificationServicePwd: test
-mlrEmailTemplateFrom: test@test.net
 spring:
   mail:
     host: localhost
     port: 25564
     defaultEncoding: UTF-8
     protocol: smtp
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          jwk-set-uri: https://test.gov/test
     
 security:
   basic:
     enabled: false
-  oauth2:
-    resource:
-      filter-order: 3
-      id: trusted-app
-      jwt:
-        keyUri: http://fake.gov/oauth/token_key
   require-ssl: false
+
+mlr:
+  email:
+    template: 
+      from: test@test.net

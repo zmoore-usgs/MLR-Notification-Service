@@ -1,22 +1,22 @@
 package gov.usgs.wma.mlrnotification.model;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import java.util.ArrayList;
-import static org.junit.Assert.assertEquals;
-import org.junit.Before;
-import org.springframework.test.context.junit4.SpringRunner;
- 
-@RunWith(SpringRunner.class)
-public class EmailTest {
-	
-		
-	private final Email validEmail  = new Email();
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
+
+@ExtendWith(SpringExtension.class)
+public class EmailRequestTest {
+	private final EmailRequest validEmail  = new EmailRequest();
 	
 	private final String validText = "test";
 	private final String validAddress = "test@test.com";
 	
-	@Before
+	@BeforeEach
 	public void setup() {
 		ArrayList<String> toList = new ArrayList<>();
 		toList.add(validAddress);
