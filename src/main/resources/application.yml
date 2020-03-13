@@ -19,7 +19,7 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          jwk-set-uri: ${oauthResourceTokenKeyUri}
+          jwk-set-uri: ${oauthResourceJwkSetUri}
 
 security:
   basic:
