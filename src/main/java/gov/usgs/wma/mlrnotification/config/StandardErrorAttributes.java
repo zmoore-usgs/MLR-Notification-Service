@@ -11,16 +11,16 @@ import gov.usgs.wma.mlrnotification.GlobalDefaultExceptionHandler;
 @Component
 public class StandardErrorAttributes extends DefaultErrorAttributes {
 
-    @Override
-    public Map<String, Object> getErrorAttributes(WebRequest request, boolean includeStackTrace) {
-        Map<String, Object> errorAttributes = super.getErrorAttributes(request, includeStackTrace);
+	@Override
+	public Map<String, Object> getErrorAttributes(WebRequest request, boolean includeStackTrace) {
+		Map<String, Object> errorAttributes = super.getErrorAttributes(request, includeStackTrace);
 
-        if(errorAttributes.containsKey("message")) {
-            errorAttributes.put(GlobalDefaultExceptionHandler.ERROR_MESSAGE_KEY, errorAttributes.get("message"));
-        } else if(errorAttributes.containsKey("error")) {
-            errorAttributes.put(GlobalDefaultExceptionHandler.ERROR_MESSAGE_KEY, errorAttributes.get("error"));
-        }
+		if(errorAttributes.containsKey("message")) {
+			errorAttributes.put(GlobalDefaultExceptionHandler.ERROR_MESSAGE_KEY, errorAttributes.get("message"));
+		} else if(errorAttributes.containsKey("error")) {
+			errorAttributes.put(GlobalDefaultExceptionHandler.ERROR_MESSAGE_KEY, errorAttributes.get("error"));
+		}
 
-        return errorAttributes;
-    }
+		return errorAttributes;
+	}
 }

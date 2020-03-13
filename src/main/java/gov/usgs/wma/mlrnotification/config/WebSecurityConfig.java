@@ -37,8 +37,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.antMatchers("/swagger-resources/**", "/webjars/**", "/v2/**", "/public").permitAll()
 				.antMatchers("/version", "/info**", "/health/**", "/favicon.ico", "/swagger-ui.html").permitAll()
 				.antMatchers("/actuator/health").permitAll()
-                .anyRequest().authenticated()
-            .and().oauth2ResourceServer().authenticationEntryPoint(standardAuthEntryPoint()).jwt()
+				.anyRequest().authenticated()
+			.and().oauth2ResourceServer().authenticationEntryPoint(standardAuthEntryPoint()).jwt()
 		;
 	}
 

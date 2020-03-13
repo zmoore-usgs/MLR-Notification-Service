@@ -28,11 +28,11 @@ public class Controller {
 	public EmailService emailService;
 	
 	@Value("${mlr.email.template.from}")
-    private String templateFrom;
-    
-    @Autowired
-    public Controller(EmailService emailService) {
-        this.emailService = emailService;
+	private String templateFrom;
+	
+	@Autowired
+	public Controller(EmailService emailService) {
+		this.emailService = emailService;
 	}
 	
 	@ApiResponses(value={
@@ -47,7 +47,7 @@ public class Controller {
 		//Check for provided "from" address
 		if(emailJson.getFrom() == null || emailJson.getFrom().isEmpty()){
 			emailJson.setFrom(templateFrom);
-        }
+		}
 
 		String validationStatus = emailJson.validate();
 
