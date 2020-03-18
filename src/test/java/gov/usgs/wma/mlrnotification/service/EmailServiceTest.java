@@ -145,13 +145,12 @@ public class EmailServiceTest {
 
 			String fileName = bodyPart.getFileName();
 
-			InputStream is = bodyPart.getInputStream();
-			Scanner s = new Scanner(is);
-			s.useDelimiter("\\A");
-			String fileContents = s.hasNext() ? s.next() : "";
-			s.close();
-
-			attachments.put(fileName, fileContents);
+			try(InputStream is = bodyPart.getInputStream(); Scanner s = new Scanner(is);) {
+				s.useDelimiter("\\A");
+				String fileContents = s.hasNext() ? s.next() : "";
+				s.close();
+				attachments.put(fileName, fileContents);
+			}
 		}
 		return attachments;
 	}
