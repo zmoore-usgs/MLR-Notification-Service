@@ -15,16 +15,18 @@ spring:
     protocol: smtp
   profiles:
     active: default, swagger
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          jwk-set-uri: ${oauthResourceJwkSetUri}
 
 security:
   basic:
     enabled: false
-  oauth2:
-    resource:
-      filter-order: 3
-      id: ${oauthResourceId:oauth2-resource}
-      jwt:
-        keyUri: ${oauthResourceTokenKeyUri}
   require-ssl: true
 
-mlrEmailTemplateFrom: ${MLR_NOTIFICATION_EMAIL_FROM}
+mlr:
+  email:
+    template: 
+      from: ${MLR_NOTIFICATION_EMAIL_FROM}

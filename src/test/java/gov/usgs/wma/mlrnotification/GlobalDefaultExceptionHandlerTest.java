@@ -1,18 +1,19 @@
 package gov.usgs.wma.mlrnotification;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.IOException;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.mock.http.MockHttpInputMessage;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
@@ -25,7 +26,7 @@ public class GlobalDefaultExceptionHandlerTest {
 
 	private GlobalDefaultExceptionHandler controller = new GlobalDefaultExceptionHandler();
 
-	@Before
+	@BeforeEach
 	public void setUp() throws Exception {
 		MockitoAnnotations.initMocks(this);
 	}
@@ -70,7 +71,7 @@ public class GlobalDefaultExceptionHandlerTest {
 	public void handleHttpMessageNotReadableException() throws IOException {
 		HttpServletResponse response = new MockHttpServletResponse();
 		String expected = "Some123$Mes\tsage!!.";
-		Map<String, String> actual = controller.handleUncaughtException(new HttpMessageNotReadableException(expected), request, response);
+		Map<String, String> actual = controller.handleUncaughtException(new HttpMessageNotReadableException(expected, new MockHttpInputMessage("test".getBytes())), request, response);
 		assertEquals(expected, actual.get(GlobalDefaultExceptionHandler.ERROR_MESSAGE_KEY));
 		assertEquals(HttpStatus.BAD_REQUEST.value(), response.getStatus());
 	}
@@ -79,7 +80,7 @@ public class GlobalDefaultExceptionHandlerTest {
 	public void handleMultilineHttpMessageNotReadableException() throws IOException {
 		HttpServletResponse response = new MockHttpServletResponse();
 		String expected = "ok to see";
-		Map<String, String> actual = controller.handleUncaughtException(new HttpMessageNotReadableException("ok to see\nhide this\nand this"), request, response);
+		Map<String, String> actual = controller.handleUncaughtException(new HttpMessageNotReadableException("ok to see\nhide this\nand this", new MockHttpInputMessage("test".getBytes())), request, response);
 		assertEquals(expected, actual.get(GlobalDefaultExceptionHandler.ERROR_MESSAGE_KEY));
 		assertEquals(HttpStatus.BAD_REQUEST.value(), response.getStatus());
 	}	

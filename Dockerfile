@@ -23,7 +23,7 @@ RUN ${BUILD_COMMAND}
 FROM usgswma/wma-spring-boot-base:8-jre-slim-0.0.4
 
 ENV serverPort=6025
-ENV oauthResourceTokenKeyUri=https://example.gov/oauth/token_key
+ENV oauthResourceJwkSetUri=https://example.gov/oauth/jwks.json
 ENV oauthResourceId=resource-id
 ENV MLR_NOTIFICATION_EMAIL_FROM=fakeperson@usgs.gov
 ENV MLR_NOTIFICATION_EMAIL_HOST=fakehost
