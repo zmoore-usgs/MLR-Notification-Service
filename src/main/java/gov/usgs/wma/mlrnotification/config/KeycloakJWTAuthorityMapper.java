@@ -9,7 +9,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.jwt.Jwt;
 
-public class WaterAuthJWTAuthorityMapper implements Converter<Jwt, Collection<GrantedAuthority>> {
+public class KeycloakJWTAuthorityMapper implements Converter<Jwt, Collection<GrantedAuthority>> {
 
     public Collection<GrantedAuthority> convert(Jwt jwt) {
         Collection<?> authorities = (Collection<?>)
